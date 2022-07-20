@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Yarn
+from .forms import ProductionForm
 
 # Add the yarn class & list and view function below the imports
 # class Yarn:  # Note that parens are optional if not inheriting from another class
@@ -34,7 +35,21 @@ def yarns_index(request):
 
 def yarns_detail(request, yarn_id):
   yarn = Yarn.objects.get(id=yarn_id)
-  return render(request, 'yarns/detail.html', { 'yarn': yarn })
+  production_form = ProductionForm()
+  return render(request, 'yarns/detail.html', { 'yarn': yarn, 'production_form': production_form
+  })
+
+  def add_production(request, cat_id):
+  # create a ModelForm instance using the data in request.POST
+    form = ProductionForm(request.POST)
+  # validate the form
+  if form.is_valid():
+    # don't save the form to the db until it
+    # has the cat_id assigned
+    new_production = form.save(commit=False)
+    new_production.yarn_id = yarn_id
+    new_production.save()
+  return redirect('detail', yarn_id=yarn_id)
 
 class YarnCreate(CreateView):
   model = Yarn

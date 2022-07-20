@@ -3,22 +3,59 @@
 
 <h1>Yarn Details</h1>
 
-<div class="card">
-  <div class="card-content">
-    <span class="card-title">{{ yarn.color }}</span>
-    <p>Weight: {{ yarn.weight }}</p>
-    <p>Brand: {{ yarn.brand }}</p>
-    <!-- {% if cat.age > 0 %}
-      <p>Age: {{ cat.age }}</p>
-    {% else %}
-      <p>Age: Kitten</p>
-    {% endif %} -->
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ yarn.color }}</span>
+        <p>Weight: {{ yarn.weight }}</p>
+        <p>Brand: {{ yarn.brand }}</p>
+        <!-- {% if cat.age > 0 %}
+          <p>Age: {{ cat.age }}</p>
+        {% else %}
+          <p>Age: Kitten</p>
+        {% endif %} -->
+      </div>
+      <div class="card-action">
+        <a href="{% url 'yarns_update' yarn.id %}">Edit</a>
+        <a href="{% url 'yarns_delete' yarn.id %}">Delete</a>
+      </div>
+    </div>
   </div>
-    <div class="card-action">
-      <a href="{% url 'yarns_update' yarn.id %}">Edit</a>
-    <a href="{% url 'yarns_delete' yarn.id %}">Delete</a>
-
+  <div class="col s6">
+    <form method="POST">
+      {% csrf_token %}
+      {{ production_form.as_p }}
+      <input type="submit" class="btn" value="Add production">
+    </form>
+    <table class="striped">
+      <thead>
+        <tr><th>Date</th><th>Content</th></tr>
+      </thead>
+      <tbody>
+        {% for production in yarn.production_set.all %}
+          <tr>
+            <td>{{production.date}}</td>
+            <td>{{production.get_content_display}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
 
+<script>
+  const dateEl = document.getElementById('id_date');
+  M.Datepicker.init(dateEl, {
+    format: 'yyyy-mm-dd',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+
+  const selectEl = document.getElementById('id_content');
+  M.FormSelect.init(selectEl);
+</script>
+{% endblock %}
+</script>
 {% endblock %}
