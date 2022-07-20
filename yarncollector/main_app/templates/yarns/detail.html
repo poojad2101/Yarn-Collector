@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Yarn Details</h1>
+
+<div class="card">
+  <div class="card-content">
+    <span class="card-title">{{ yarn.color }}</span>
+    <p>Weight: {{ yarn.weight }}</p>
+    <p>Brand: {{ yarn.brand }}</p>
+    <!-- {% if cat.age > 0 %}
+      <p>Age: {{ cat.age }}</p>
+    {% else %}
+      <p>Age: Kitten</p>
+    {% endif %} -->
+  </div>
+    <div class="card-action">
+      <a href="{% url 'yarns_update' yarn.id %}">Edit</a>
+    <a href="{% url 'yarns_delete' yarn.id %}">Delete</a>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import Yarn
 
 # Add the yarn class & list and view function below the imports
 # class Yarn:  # Note that parens are optional if not inheriting from another class
@@ -16,7 +17,7 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from .models import Yarn
-# from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
 # Define the home view
@@ -30,3 +31,19 @@ def about(request):
 def yarns_index(request):
   yarns = Yarn.objects.all()
   return render(request, 'yarns/index.html', { 'yarns': yarns })
+
+def yarns_detail(request, yarn_id):
+  yarn = Yarn.objects.get(id=yarn_id)
+  return render(request, 'yarns/detail.html', { 'yarn': yarn })
+
+class YarnCreate(CreateView):
+  model = Yarn
+  fields = '__all__'
+
+class YarnUpdate(UpdateView):
+  model = Yarn
+  fields = ['color', 'weight', 'brand']
+
+class YarnDelete(DeleteView):
+  model = Yarn
+  success_url = '/yarns/'  
