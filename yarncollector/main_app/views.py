@@ -17,13 +17,12 @@ from .forms import ProductionForm
 # ]
 
 from django.http import HttpResponse
-from .models import Yarn
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
 # Define the home view
 def home(request):
-  return HttpResponse('<h1>Hello /ᐠ｡‸｡ᐟ\ﾉ</h1>')
+  return render(request, 'home.html')
 
 def about(request):
   return render(request, 'about.html')
@@ -39,17 +38,17 @@ def yarns_detail(request, yarn_id):
   return render(request, 'yarns/detail.html', { 'yarn': yarn, 'production_form': production_form
   })
 
-  def add_production(request, cat_id):
-  # create a ModelForm instance using the data in request.POST
-    form = ProductionForm(request.POST)
-  # validate the form
+  
+def add_production(request, cat_id):
+  
+  form = ProductionForm(request.POST)
+
   if form.is_valid():
-    # don't save the form to the db until it
-    # has the cat_id assigned
+   
     new_production = form.save(commit=False)
     new_production.yarn_id = yarn_id
     new_production.save()
-  return redirect('detail', yarn_id=yarn_id)
+  return redirect('detail', yarn_id=yarn_id)  
 
 class YarnCreate(CreateView):
   model = Yarn
